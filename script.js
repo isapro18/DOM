@@ -51,42 +51,23 @@ let totalMessages = 0;
 // 2. FUNCIONES AUXILIARES
 // ============================================
 
-/**
- * Valida que un campo no esté vacío ni contenga solo espacios en blanco
- * @param {string} value - El valor a validar
- * @returns {boolean} - true si es válido, false si no lo es
- */
 function isValidInput(value) {
     return value.trim().length > 0;
 }
 
-/**
- * Muestra un mensaje de error en un elemento específico
- * @param {HTMLElement} errorElement - Elemento donde mostrar el error
- * @param {string} message - Mensaje de error a mostrar
- */
 function showError(errorElement, message) {
     errorElement.textContent = message;
 }
 
-/**
- * Limpia el mensaje de error de un elemento específico
- * @param {HTMLElement} errorElement - Elemento del que limpiar el error
- */
 function clearError(errorElement) {
     errorElement.textContent = "";
 }
 
-/**
- * Valida todos los campos del formulario
- * @returns {boolean} - true si todos los campos son válidos, false si alguno no lo es
- */
 function validateForm() {
     const userName = userNameInput.value;
     const userMessage = userMessageInput.value;
     let isValid = true;
 
-    // Validar nombre
     if (!isValidInput(userName)) {
         showError(userNameError, "El nombre es obligatorio");
         userNameInput.classList.add("error");
@@ -96,7 +77,6 @@ function validateForm() {
         userNameInput.classList.remove("error");
     }
 
-    // Validar mensaje
     if (!isValidInput(userMessage)) {
         showError(userMessageError, "El mensaje es obligatorio");
         userMessageInput.classList.add("error");
@@ -108,3 +88,71 @@ function validateForm() {
 
     return isValid;
 }
+
+
+// ============================================
+// 4. MANEJO DE EVENTOS
+// ============================================
+
+/**
+ * Maneja el evento de envío del formulario
+ * @param {Event} event - Evento del formulario
+ */
+async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    // Validar formulario
+    if (!validateForm()) {
+        return;
+    }
+
+    // Obtener valores
+    const userName = userNameInput.value.trim();
+    const userMessage = userMessageInput.value.trim();
+
+    try {
+        // Buscar usuario en db.json
+        const response = await fetch(`http://localhost:3000/users?name=${userName}`);
+        const usuarios = await response.json();
+
+        if (usuarios.length === 0) {
+            messagesContainer.innerHTML = `
+                <div class="error-card">
+                    <p>No se encontró ningún usuario con el nombre "${userName}".</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Si existe el usuario, por ahora solo mostramos un log
+        console.log("Usuario encontrado:", usuarios[0]);
+        console.log("Mensaje ingresado:", userMessage);
+
+    } catch (error) {
+        messagesContainer.innerHTML = `
+            <div class="error-card">
+                <p>Error al consultar el servidor.</p>
+            </div>
+        `;
+    }
+}
+
+
+// ============================================
+// 5. REGISTRO DE EVENTOS
+// ============================================
+
+messageForm.addEventListener('submit', handleFormSubmit);
+
+userNameInput.addEventListener('input', () => clearError(userNameError));
+userMessageInput.addEventListener('input', () => clearError(userMessageError));
+
+
+// ============================================
+// 7. INICIALIZACIÓN (OPCIONAL)
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ DOM completamente cargado');
+    console.log('📝 Aplicación de registro de mensajes iniciada');
+});
