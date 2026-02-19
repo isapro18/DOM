@@ -591,3 +591,82 @@ body {
   border-color: var(--color-error);
   transform: scale(1.05);                  
 }
+
+/* ============================================
+   BOTONES DE ACCIONES EN TABLA
+   ============================================ */
+
+.tabla-tareas .acciones {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.btn-accion {
+    padding: 0.4rem 0.8rem;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: var(--font-family-base);
+}
+
+.btn-eliminar {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-eliminar:hover {
+    background-color: #fecaca;
+    transform: translateY(-1px);
+}
+
+.btn-editar {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.btn-editar:hover {
+    background-color: #bfdbfe;
+    transform: translateY(-1px);
+}
+
+.btn-accion:active {
+    transform: translateY(0);
+}
+
+.btn-accion:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.message-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.3s ease-out;
+}
+
+.message-notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.message-success {
+    background-color: #10b981;
+    color: white;
+}
+
+.message-error {
+    background-color: #ef4444;
+    color: white;
+}

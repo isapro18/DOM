@@ -53,6 +53,26 @@ function validateForm() {
 }
 
 // ============================================
+//   MENSAJE DE ÉXITO
+// ============================================
+
+function mostrarMensaje(mensaje, tipo = 'success') {
+    const mensajeDiv = document.createElement('div');
+    mensajeDiv.classList.add('message-notification', `message-${tipo}`);
+    mensajeDiv.textContent = mensaje;
+    
+    const container = document.querySelector('.container');
+    container.insertBefore(mensajeDiv, container.firstChild);
+    
+    setTimeout(() => mensajeDiv.classList.add('show'), 10);
+    
+    setTimeout(() => {
+        mensajeDiv.classList.remove('show');
+        setTimeout(() => mensajeDiv.remove(), 300);
+    }, 3000);
+}
+
+// ============================================
 // 3. CREACIÓN DE ELEMENTOS
 // ============================================
 
@@ -98,8 +118,14 @@ function createUserCard(usuario, tareas) {
             deleteBtn.classList.add("btn", "btn--danger");
             deleteBtn.textContent = "Eliminar";
 
-            // Enganchar evento correctamente
-            deleteBtn.addEventListener("click", () => deleteTask(t.id, usuario.id));
+            // DESHABILITAR BOTÓN MIENTRAS SE ELIMINA LA TAREA
+            deleteBtn.addEventListener("click", async () => {
+        deleteBtn.disabled = true;
+    deleteBtn.textContent = "Eliminando...";
+    deleteBtn.style.opacity = "0.5";
+    deleteBtn.style.cursor = "not-allowed";
+    await deleteTask(t.id, usuario.id);
+});
 
             taskItem.appendChild(taskText);
             taskItem.appendChild(deleteBtn);
@@ -182,8 +208,13 @@ function renderTaskForm(usuario) {
  * @param {number} userId - ID del usuario
  */
 async function deleteTask(taskId, userId) {
+    const confirmar = confirm('¿Estás seguro de que deseas eliminar esta tarea?');
+    if (!confirmar) {
+        return; // Sale sin hacer nada
+    }
     try {
         await fetch(`http://localhost:3000/tasks/${taskId}`, { method: "DELETE" });
+        mostrarMensaje('✅ Tarea eliminada exitosamente', 'success');
 
         const responseTasks = await fetch(`http://localhost:3000/tasks?userId=${userId}`);
         const tareas = await responseTasks.json();
