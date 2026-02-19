@@ -33,7 +33,27 @@ async function recargarDatosUsuario(idUsuario) {
 }
 
 // ============================================
-// 3. CREACIÓN DE ELEMENTOS Y LÓGICA CRUD
+//   MENSAJE DE ÉXITO
+// ============================================
+
+function mostrarMensaje(mensaje, tipo = 'success') {
+    const mensajeDiv = document.createElement('div');
+    mensajeDiv.classList.add('message-notification', `message-${tipo}`);
+    mensajeDiv.textContent = mensaje;
+    
+    const container = document.querySelector('.container');
+    container.insertBefore(mensajeDiv, container.firstChild);
+    
+    setTimeout(() => mensajeDiv.classList.add('show'), 10);
+    
+    setTimeout(() => {
+        mensajeDiv.classList.remove('show');
+        setTimeout(() => mensajeDiv.remove(), 300);
+    }, 3000);
+}
+
+// ============================================
+// 3. CREACIÓN DE ELEMENTOS
 // ============================================
 
 function createUserCard(usuario, tareas) {
