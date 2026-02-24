@@ -548,25 +548,34 @@ body {
     font-weight: var(--font-weight-medium);
 }
 
-/* Botón secundario */
+/* --- BOTÓN SECUNDARIO (CANCELAR) --- */
 .btn--secondary {
-    background-color: var(--color-success);
-    color: white;
-    box-shadow: var(--shadow-sm);
-    margin-top: var(--spacing-md);
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-800);
+    box-shadow: none;
     transition: all var(--transition-base);
 }
 
 .btn--secondary:hover {
-    background-color: #0f9d75; /* tono más oscuro del success */
-    box-shadow: var(--shadow-md);
+    background-color: var(--color-gray-300);
     transform: translateY(-1px);
 }
 
-.btn--secondary:active {
-    transform: translateY(0);
-    box-shadow: var(--shadow-sm);
+/* --- CONTENEDOR DE BOTONES DEL FORMULARIO --- */
+.form-tarea .form__actions {
+    display: flex;
+    gap: var(--spacing-md); /* Esto separa los botones */
+    margin-top: var(--spacing-xl);
+}
 
+.form-tarea .btn {
+    flex: 1; /* Hace que ambos midan 50% y 50% */
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none; /* Quitamos bordes raros */
+    margin: 0;
 }
  
 /* Botón de eliminar (danger) */

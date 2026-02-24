@@ -1,9 +1,3 @@
-
-// ============================================
-// 6. REFLEXIÓN Y DOCUMENTACIÓN
-// ============================================
-
-/**
  * PREGUNTAS DE REFLEXIÓN:
  * 
  * 1. ¿Qué elemento del DOM estás seleccionando?
@@ -20,4 +14,5 @@
  * 
  * 5. ¿Qué ocurre en la página cada vez que repites la acción?
  *    R: 
- */
+
+  
