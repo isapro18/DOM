@@ -1,30 +1,26 @@
 // src/api/usuariosApi.js
+// RESPONSABILIDAD: comunicación con el servidor para usuarios
+// REGLA: ninguna línea toca el DOM — sin document, sin innerHTML
 
 import { API_URL } from '../config/constants.js';
 
 /**
  * Busca un usuario por su número de documento
- * @param {string} documento - El documento a buscar
- * @returns {Object|null} - El usuario encontrado o null si no existe
+ * @param {string} documento - Documento a buscar
+ * @returns {Object|null} - Usuario encontrado o null
  */
 export async function fetchUsuarioPorDocumento(documento) {
     const response = await fetch(`${API_URL}/users?document=${documento}`);
     const usuarios = await response.json();
-
-    // Devuelve el primer usuario encontrado, o null si no hay ninguno
-    if (usuarios.length === 0) {
-        return null;
-    }
-    return usuarios[0];
+    return usuarios.length > 0 ? usuarios[0] : null;
 }
 
 /**
  * Busca un usuario por su ID
- * @param {number} userId - El ID del usuario
- * @returns {Object} - Los datos del usuario
+ * @param {number} userId - ID del usuario
+ * @returns {Object} - Datos del usuario
  */
 export async function fetchUsuarioPorId(userId) {
     const response = await fetch(`${API_URL}/users/${userId}`);
-    const usuario = await response.json();
-    return usuario;
+    return await response.json();
 }

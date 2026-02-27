@@ -1,4 +1,5 @@
 // src/config/constants.js
+// Única fuente de verdad para la URL del servidor
+// Si el puerto cambia, solo se cambia aquí
 
-// La URL base del servidor. Es el único lugar donde aparece "localhost:3000"
 export const API_URL = "http://localhost:3000";
