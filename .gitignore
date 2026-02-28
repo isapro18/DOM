@@ -4,3 +4,4 @@ node_modules/
 # Carpeta de producción — se genera con npm run build
 dist/
 
+rutina git.md  
