@@ -1,87 +1,87 @@
-# Plan Técnico — Integración de Notyf como librería externa de notificaciones
-**Autor:** Fernando Andrés Rodríguez Salamanca  
-**Versión destino:** v3.0.0  
+﻿# Plan TÃ©cnico â€” IntegraciÃ³n de Notyf como librerÃ­a externa de notificaciones
+**Autores:** Andres Santiago Calvete, Ana Isabella Rozo, Fernando Rodriguez
+**VersiÃ³n destino:** v3.0.0  
 **Rama:** feature/api-fer  
 **Fecha:** 28/02/2026  
 
 ---
 
-## 1. Librería elegida: Notyf
+## 1. LibrerÃ­a elegida: Notyf
 
 | Criterio         | Detalle                                              |
 |------------------|------------------------------------------------------|
 | Nombre           | Notyf v3                                             |
-| Instalación      | `npm install notyf` (1 comando)                      |
-| Tamaño           | 3 KB minificado — impacto mínimo en el build         |
-| API              | `new Notyf()` → `.success()` / `.error()`            |
+| InstalaciÃ³n      | `npm install notyf` (1 comando)                      |
+| TamaÃ±o           | 3 KB minificado â€” impacto mÃ­nimo en el build         |
+| API              | `new Notyf()` â†’ `.success()` / `.error()`            |
 | Compatibilidad   | ES Modules + Vite 100%                               |
-| Diseño           | Profesional, animaciones suaves, totalmente configurable |
+| DiseÃ±o           | Profesional, animaciones suaves, totalmente configurable |
 
-### ¿Por qué Notyf sobre otras opciones?
+### Â¿Por quÃ© Notyf sobre otras opciones?
 
-| Librería      | Tamaño  | API          | Vite | Veredicto          |
+| LibrerÃ­a      | TamaÃ±o  | API          | Vite | Veredicto          |
 |---------------|---------|--------------|------|--------------------|
-| **Notyf**     | 3 KB    | Mínima       | ✅    | ✅ Elegida         |
-| SweetAlert2   | 45 KB   | Compleja     | ✅    | Demasiado pesada   |
-| iziToast      | 12 KB   | Media        | ✅    | Más configuración  |
-| Toastify-js   | 2 KB    | Mínima       | ✅    | Menos personalizable|
+| **Notyf**     | 3 KB    | MÃ­nima       | âœ…    | âœ… Elegida         |
+| SweetAlert2   | 45 KB   | Compleja     | âœ…    | Demasiado pesada   |
+| iziToast      | 12 KB   | Media        | âœ…    | MÃ¡s configuraciÃ³n  |
+| Toastify-js   | 2 KB    | MÃ­nima       | âœ…    | Menos personalizable|
 
 ---
 
-## 2. Diagnóstico del estado actual
+## 2. DiagnÃ³stico del estado actual
 
 El proyecto tiene un sistema de notificaciones propio en
 `src/ui/components/toast.js`. Funciona correctamente pero
 requiere mantenimiento manual de animaciones, estilos y
 posicionamiento. Al migrar a Notyf, toda esa responsabilidad
-pasa a la librería — nuestro código solo llama a funciones.
+pasa a la librerÃ­a â€” nuestro cÃ³digo solo llama a funciones.
 
 ---
 
 ## 3. Archivos que cambian
 
-| Archivo                                   | Acción         | Detalle                                    |
+| Archivo                                   | AcciÃ³n         | Detalle                                    |
 |-------------------------------------------|----------------|--------------------------------------------|
 | `src/ui/components/notificaciones.js`     | NUEVO          | Wrapper de Notyf con la API del proyecto   |
-| `src/script.js`                           | 2 líneas       | Cambio de import de toast.js a notificaciones.js |
-| `src/ui/components/toast.js`              | DEPRECADO      | Se mantiene como referencia histórica      |
+| `src/script.js`                           | 2 lÃ­neas       | Cambio de import de toast.js a notificaciones.js |
+| `src/ui/components/toast.js`              | DEPRECADO      | Se mantiene como referencia histÃ³rica      |
 | `src/styles/toasts.css`                   | DEPRECADO      | Notyf trae su propio CSS                   |
 | `package.json`                            | 1 dependencia  | Se agrega `notyf` en dependencies          |
 
-**Total de cambios en lógica:** 2 líneas en script.js  
-**Riesgo:** Muy bajo — solo cambia la capa de presentación
+**Total de cambios en lÃ³gica:** 2 lÃ­neas en script.js  
+**Riesgo:** Muy bajo â€” solo cambia la capa de presentaciÃ³n
 
 ---
 
 ## 4. Impacto en la estructura del proyecto
 
 ```
-Antes                               Después
-──────────────────────────────      ─────────────────────────────────
+Antes                               DespuÃ©s
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€      â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 src/ui/components/
-└── toast.js       ← lógica +       src/ui/components/
-    animaciones +                   ├── toast.js        ← DEPRECATED
-    estilos propios                 └── notificaciones.js ← NUEVO
+â””â”€â”€ toast.js       â† lÃ³gica +       src/ui/components/
+    animaciones +                   â”œâ”€â”€ toast.js        â† DEPRECATED
+    estilos propios                 â””â”€â”€ notificaciones.js â† NUEVO
                                         (solo configura Notyf)
 
 src/styles/
-└── toasts.css     ← estilos        node_modules/notyf/
-    manuales                        └── notyf.min.css   ← gestionado
+â””â”€â”€ toasts.css     â† estilos        node_modules/notyf/
+    manuales                        â””â”€â”€ notyf.min.css   â† gestionado
                                         por npm
 ```
 
-### Grafo de dependencias actualizado (RNF05 — sin ciclos)
+### Grafo de dependencias actualizado (RNF05 â€” sin ciclos)
 
 ```
-notyf (npm)           → no importa nada del proyecto
-notificaciones.js     → solo importa notyf
-script.js             → importa notificaciones.js
-                         (y todo lo demás igual)
+notyf (npm)           â†’ no importa nada del proyecto
+notificaciones.js     â†’ solo importa notyf
+script.js             â†’ importa notificaciones.js
+                         (y todo lo demÃ¡s igual)
 ```
 
 ---
 
-## 5. Instalación
+## 5. InstalaciÃ³n
 
 ```powershell
 npm install notyf
@@ -95,31 +95,31 @@ Esto agrega en package.json:
 ```
 
 Notyf pasa a `dependencies` (no `devDependencies`) porque
-forma parte del código que corre en el navegador, no solo
+forma parte del cÃ³digo que corre en el navegador, no solo
 en el entorno de desarrollo.
 
 ---
 
 ## 6. Cambio en script.js
 
-Solo se modifican las líneas de import. Las llamadas a
+Solo se modifican las lÃ­neas de import. Las llamadas a
 `showSuccessToast()`, `showErrorToast()`, etc. no cambian.
 
 ```javascript
-// ── ANTES ──────────────────────────────────────────────
+// â”€â”€ ANTES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import { showSuccessToast, showErrorToast, showInfoToast } from './ui/components/toast.js';
 
-// ── DESPUÉS ────────────────────────────────────────────
+// â”€â”€ DESPUÃ‰S â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import { showSuccessToast, showErrorToast, showInfoToast, showWarningToast } from './ui/components/notificaciones.js';
 ```
 
-El resto de `script.js` permanece idéntico. Esto demuestra
-el principio de separación de responsabilidades: el módulo
+El resto de `script.js` permanece idÃ©ntico. Esto demuestra
+el principio de separaciÃ³n de responsabilidades: el mÃ³dulo
 de notificaciones es intercambiable sin afectar al coordinador.
 
 ---
 
-## 7. Configuración de Notyf en notificaciones.js
+## 7. ConfiguraciÃ³n de Notyf en notificaciones.js
 
 ```javascript
 const notyf = new Notyf({
@@ -150,7 +150,7 @@ docs: agrega plan tecnico de integracion Notyf
 
 ---
 
-## 9. Verificación de npm run build con Notyf
+## 9. VerificaciÃ³n de npm run build con Notyf
 
 Al ejecutar `npm run build`, Vite incluye Notyf en el bundle:
 
@@ -159,21 +159,21 @@ dist/assets/index-[hash].js    ~16 KB  (antes ~13 KB, +3KB de Notyf)
 dist/assets/index-[hash].css   ~10 KB  (incluye notyf.min.css)
 ```
 
-El incremento es de aproximadamente 3 KB — completamente
+El incremento es de aproximadamente 3 KB â€” completamente
 aceptable para la mejora de experiencia que aporta.
 
 ---
 
-## 10. Criterios de aceptación
+## 10. Criterios de aceptaciÃ³n
 
 - [ ] `npm install notyf` ejecutado sin errores
-- [ ] `notyf` aparece en `package.json` → `dependencies`
+- [ ] `notyf` aparece en `package.json` â†’ `dependencies`
 - [ ] `notificaciones.js` creado en `src/ui/components/`
 - [ ] Import actualizado en `script.js`
-- [ ] Al buscar un usuario → aparece notificación Notyf verde
-- [ ] Al crear una tarea → aparece notificación Notyf verde
-- [ ] Al eliminar una tarea → aparece notificación Notyf verde
-- [ ] Al haber un error → aparece notificación Notyf roja
-- [ ] Al cambiar estado → aparece notificación Notyf azul
+- [ ] Al buscar un usuario â†’ aparece notificaciÃ³n Notyf verde
+- [ ] Al crear una tarea â†’ aparece notificaciÃ³n Notyf verde
+- [ ] Al eliminar una tarea â†’ aparece notificaciÃ³n Notyf verde
+- [ ] Al haber un error â†’ aparece notificaciÃ³n Notyf roja
+- [ ] Al cambiar estado â†’ aparece notificaciÃ³n Notyf azul
 - [ ] `npm run dev` sin errores de consola
 - [ ] `npm run build` genera dist/ sin warnings
