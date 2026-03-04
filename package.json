@@ -1,7 +1,7 @@
-﻿{
+{
   "name": "gestion-tareas-sena",
   "version": "1.0.0",
-  "description": "Ejercicio DOM + API - SENA - RF04 ExportaciÃ³n de tareas",
+  "description": "Ejercicio DOM + API - SENA - RF04 Exportacion de tareas",
   "author": "Andres Santiago Calvete, Ana Isabella Rozo, Fernando Rodriguez",
   "type": "module",
   "scripts": {
@@ -16,4 +16,3 @@
     "notyf": "^3.10.0"
   }
 }
-
